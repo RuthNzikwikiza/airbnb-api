@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  HOST
+  GUEST
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  name              String
+  email             String    @unique
+  username          String    @unique
+  phone             String
+  role              Role      @default(GUEST)
+  avatar            String?
+  avatarPublicId    String?
+  bio               String?
+  password          String
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  updatedAt         DateTime  @updatedAt
+  listings          Listing[]
+  bookings          Booking[]
+}
+model Listing {
+  id            Int            @id @default(autoincrement())
+  title         String
+  description   String
+  location      String
+  pricePerNight Float
+  guests        Int
+  type          String
+  amenities     String[]
+  rating        Float?
+  hostId        Int
+  host          User           @relation(fields: [hostId], references: [id])
+  bookings      Booking[]
+  photos        ListingPhoto[]
+
+  @@index([location])
+  @@index([pricePerNight])
+  @@index([type])
+  @@index([hostId])
+  @@index([type, location])
+}
+
+model ListingPhoto {
+  id        Int     @id @default(autoincrement())
+  url       String
+  publicId  String
+  listingId Int
+  listing   Listing @relation(fields: [listingId], references: [id])
+}
+model Booking {
+  id         Int           @id @default(autoincrement())
+  listingId  Int
+  guestId    Int
+  checkIn    DateTime
+  checkOut   DateTime
+  totalPrice Float
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  listing    Listing       @relation(fields: [listingId], references: [id])
+  guest      User          @relation(fields: [guestId], references: [id])
+
+  @@index([guestId])
+  @@index([listingId])
+  @@index([listingId, checkIn, checkOut])
+}
