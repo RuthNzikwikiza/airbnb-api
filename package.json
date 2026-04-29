@@ -21,8 +21,9 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-pg": "^6.0.0",
+    "@prisma/client": "^6.0.0",
+    "prisma": "^6.19.3",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.6.1",
     "dotenv": "^16.5.0",
@@ -44,7 +45,5 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "nodemon": "^3.1.9",
-    "prisma": "^6.19.3",
     "tsx": "^4.7.0"
-  }
-}
+  }}
