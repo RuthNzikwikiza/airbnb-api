@@ -18,7 +18,8 @@ export async function getUserById(req: Request, res: Response) {
   res.status(200).json(user);
 }
 
-export async function createUser(req: Request, res: Response) {
+import bcrypt from "bcrypt";
+export const createUser = async (req: Request, res: Response): Promise<void> => {
   const { name, email, username, phone, role, avatar, bio } = req.body;
 
   if (!name || !email || !username || !phone || !role) {
@@ -28,16 +29,29 @@ export async function createUser(req: Request, res: Response) {
     return;
   }
 
-  if (role !== "host" && role !== "guest") {
-    res.status(400).json({ error: 'Role must be either "host" or "guest".' });
+  if (role !== "host" && role !== "guest" && role !== "HOST" && role !== "GUEST") {
+    res.status(400).json({ error: 'Role must be either "HOST" or "GUEST".' });
     return;
   }
 
   try {
+    const hashedPassword = await bcrypt.hash("changeme123", 10);
+    
     const newUser = await prisma.user.create({
-      data: { name, email, username, phone, role, avatar, bio },
+      data: {
+        name,
+        email,
+        username,
+        phone,
+        role,
+        avatar,
+        bio,
+        password: hashedPassword,
+      },
     });
-    res.status(201).json(newUser);
+
+    const { password: _, ...userWithoutPassword } = newUser;
+    res.status(201).json(userWithoutPassword);
   } catch (error: any) {
     if (error.code === "P2002") {
       res.status(400).json({ error: "Email or username already exists." });
@@ -45,7 +59,7 @@ export async function createUser(req: Request, res: Response) {
     }
     res.status(500).json({ error: "Something went wrong." });
   }
-}
+};
 
 export async function updateUser(req: Request, res: Response) {
   const id = parseInt(req.params.id);
