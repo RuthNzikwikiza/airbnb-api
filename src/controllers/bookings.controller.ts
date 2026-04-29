@@ -41,8 +41,7 @@ export async function createBooking(req: AuthRequest, res: Response) {
   const totalPrice = days * listing.pricePerNight;
 
   try {
-    const booking = await prisma.$transaction(async (tx) => {
-      // Conflict check inside transaction — atomic with the create
+    const booking = await prisma.$transaction(async (tx: any) => {
       const conflict = await tx.booking.findFirst({
         where: {
           listingId,

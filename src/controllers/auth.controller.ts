@@ -89,10 +89,10 @@ export async function login(req: Request, res: Response) {
   }
 
   const token = jwt.sign(
-    { userId: user.id, role: user.role },
-    JWT_SECRET,
-    { expiresIn: JWT_EXPIRES_IN }
-  );
+  { userId: user.id, role: user.role },
+  JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
   const { password: _, ...userWithoutPassword } = user;
 
