@@ -5,29 +5,70 @@ import {
   createUser,
   updateUser,
   deleteUser,
-} from "../controllers/users.controller.js";
-import { authenticate } from "../middlewares/auth.middleware.js";
+  getUserStats,
+} from "../../controllers/users.controller.js";
+import { authenticate } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
+
+/**
+ * @swagger
+ * /users/stats:
+ *   get:
+ *     summary: Get user statistics
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: User stats
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalUsers:
+ *                   type: integer
+ *                   example: 5
+ *                 byRole:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */
+router.get("/stats", getUserStats);
 
 /**
  * @swagger
  * /users:
  *   get:
  *     summary: Get all users
- *     description: Returns a list of all registered users. Requires authentication.
+ *     description: Returns a paginated list of all registered users. Requires authentication.
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
  *     responses:
  *       200:
  *         description: List of users retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 meta:
+ *                   type: object
  *       401:
  *         description: No token provided or token is invalid
  */
@@ -113,11 +154,36 @@ router.post("/", createUser);
  *       401:
  *         description: Unauthorized
  */
+router.put("/:id", authenticate, updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.delete("/:id", authenticate, deleteUser);
+
 /**
  * @swagger
  * components:
  *   schemas:
- *
  *     User:
  *       type: object
  *       properties:
@@ -193,6 +259,7 @@ router.post("/", createUser);
  *         password:
  *           type: string
  *           example: secret123
+ *
  *     AuthResponse:
  *       type: object
  *       properties:
@@ -200,32 +267,7 @@ router.post("/", createUser);
  *           type: string
  *           example: eyJhbGciOiJIUzI1NiJ9...
  *         user:
- */        $ref: '#/components/schemas/User'
-
-router.put("/:id", authenticate, updateUser);
-
-/**
- * @swagger
- * /users/{id}:
- *   delete:
- *     summary: Delete a user
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: User deleted successfully
- *       404:
- *         description: User not found
- *       401:
- *         description: Unauthorized
+ *           $ref: '#/components/schemas/User'
  */
-router.delete("/:id", authenticate, deleteUser);
 
 export default router;

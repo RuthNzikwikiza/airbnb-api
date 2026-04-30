@@ -37,3 +37,8 @@ export type ListingPhoto = Prisma.ListingPhotoModel
  * 
  */
 export type Booking = Prisma.BookingModel
+/**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel

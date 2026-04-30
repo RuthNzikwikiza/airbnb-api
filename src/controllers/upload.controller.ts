@@ -4,7 +4,7 @@ import { AuthRequest } from "../middlewares/auth.middleware.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../config/cloudinary.js";
 
 export async function uploadAvatar(req: AuthRequest, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
 
   if (req.userId !== id) {
     res.status(403).json({ error: "You can only change your own avatar." });
@@ -41,7 +41,7 @@ export async function uploadAvatar(req: AuthRequest, res: Response) {
 }
 
 export async function deleteAvatar(req: AuthRequest, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
 
   if (req.userId !== id) {
     res.status(403).json({ error: "You can only delete your own avatar." });
@@ -59,7 +59,6 @@ export async function deleteAvatar(req: AuthRequest, res: Response) {
     return;
   }
 
-  
   if (user.avatarPublicId) {
     await deleteFromCloudinary(user.avatarPublicId);
   }
@@ -73,7 +72,7 @@ export async function deleteAvatar(req: AuthRequest, res: Response) {
 }
 
 export async function uploadListingPhotos(req: AuthRequest, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
 
   const listing = await prisma.listing.findUnique({
     where: { id },
@@ -123,8 +122,8 @@ export async function uploadListingPhotos(req: AuthRequest, res: Response) {
 }
 
 export async function deleteListingPhoto(req: AuthRequest, res: Response) {
-  const id = parseInt(req.params.id);
-  const photoId = parseInt(req.params.photoId);
+  const id = req.params.id;
+  const photoId = req.params.photoId;
 
   const listing = await prisma.listing.findUnique({ where: { id } });
   if (!listing) {

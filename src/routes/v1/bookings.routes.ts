@@ -3,11 +3,11 @@ import {
   createBooking,
   cancelBooking,
   getMyBookings,
-} from "../controllers/bookings.controller.js";
+} from "../../controllers/bookings.controller.js";
 import {
   authenticate,
   requireGuest,
-} from "../middlewares/auth.middleware.js";
+} from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -19,14 +19,12 @@ const router = Router();
  *       type: object
  *       properties:
  *         id:
- *           type: integer
- *           example: 1
+ *           type: string
+ *           example: a3f8c2d1-4b5e-4f6a-8c9d-1e2f3a4b5c6d
  *         listingId:
- *           type: integer
- *           example: 1
+ *           type: string
  *         guestId:
- *           type: integer
- *           example: 2
+ *           type: string
  *         checkIn:
  *           type: string
  *           format: date-time
@@ -45,15 +43,14 @@ const router = Router();
  *         createdAt:
  *           type: string
  *           format: date-time
- *           example: 2026-04-27T22:26:19.790Z
  *
  *     CreateBookingInput:
  *       type: object
  *       required: [listingId, checkIn, checkOut]
  *       properties:
  *         listingId:
- *           type: integer
- *           example: 1
+ *           type: string
+ *           example: a3f8c2d1-4b5e-4f6a-8c9d-1e2f3a4b5c6d
  *         checkIn:
  *           type: string
  *           format: date
@@ -75,12 +72,6 @@ const router = Router();
  *     responses:
  *       200:
  *         description: List of bookings for logged in user
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Booking'
  *       401:
  *         description: Unauthorized
  */
@@ -94,7 +85,6 @@ router.get("/", authenticate, getMyBookings);
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
- *     description: Only guests can create bookings. Total price is calculated automatically.
  *     requestBody:
  *       required: true
  *       content:
@@ -104,18 +94,10 @@ router.get("/", authenticate, getMyBookings);
  *     responses:
  *       201:
  *         description: Booking created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Booking'
  *       400:
  *         description: Missing fields or invalid dates
- *       401:
- *         description: Unauthorized
  *       403:
  *         description: Only guests can make bookings
- *       404:
- *         description: Listing not found
  *       409:
  *         description: Listing already booked for these dates
  */
@@ -134,17 +116,10 @@ router.post("/", authenticate, requireGuest, createBooking);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
- *         description: The booking ID
+ *           type: string
  *     responses:
  *       200:
  *         description: Booking cancelled successfully
- *       400:
- *         description: Booking already cancelled
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: You can only cancel your own bookings
  *       404:
  *         description: Booking not found
  */

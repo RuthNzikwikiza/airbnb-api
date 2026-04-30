@@ -6,14 +6,14 @@ import {
   updateListing,
   deleteListing,
   getListingStats,
-} from "../controllers/listings.controller.js";
+  searchListings,
+} from "../../controllers/listings.controller.js";
 import {
   authenticate,
   requireHost,
-} from "../middlewares/auth.middleware.js";
-
+} from "../../middlewares/auth.middleware.js";
 const router = Router();
-
+router.get("/search", searchListings);
 /**
  * @swagger
  * components:

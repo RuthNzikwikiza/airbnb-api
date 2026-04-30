@@ -9,6 +9,7 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log(" Seeding database...");
 
+  await prisma.review.deleteMany();
   await prisma.booking.deleteMany();
   await prisma.listingPhoto.deleteMany();
   await prisma.listing.deleteMany();
@@ -83,7 +84,7 @@ async function main() {
     },
   });
 
-  console.log(" Created users");
+  console.log("👥 Created users");
 
   const apartment = await prisma.listing.create({
     data: {
@@ -178,7 +179,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error(" Seed failed:", e);
+    console.error("❌ Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => await prisma.$disconnect());

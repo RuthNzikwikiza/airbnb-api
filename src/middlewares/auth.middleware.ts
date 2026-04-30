@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env["JWT_SECRET"] as string;
 
 export interface AuthRequest extends Request {
-  userId?: number;
+  userId?: string;
   role?: string;
 }
 
@@ -24,7 +24,7 @@ export function authenticate(
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as {
-      userId: number;
+      userId: string;
       role: string;
     };
 

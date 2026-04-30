@@ -3,6 +3,7 @@ import prisma from "../config/prisma.js";
 import { AuthRequest } from "../middlewares/auth.middleware.js";
 import { sendEmail } from "../config/email.js";
 import { bookingConfirmationEmail, bookingCancellationEmail } from "../templates/emails.js";
+
 export async function createBooking(req: AuthRequest, res: Response) {
   const { listingId, checkIn, checkOut } = req.body;
 
@@ -69,7 +70,6 @@ export async function createBooking(req: AuthRequest, res: Response) {
       });
     });
 
-    // Send email outside the transaction
     try {
       const guest = await prisma.user.findUnique({ where: { id: req.userId } });
       if (guest) {
@@ -102,7 +102,7 @@ export async function createBooking(req: AuthRequest, res: Response) {
 }
 
 export async function cancelBooking(req: AuthRequest, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
 
   const booking = await prisma.booking.findUnique({
     where: { id },
@@ -129,7 +129,6 @@ export async function cancelBooking(req: AuthRequest, res: Response) {
     data: { status: "CANCELLED" },
   });
 
-  // Send cancellation email
   try {
     const guest = await prisma.user.findUnique({ where: { id: req.userId } });
     if (guest) {

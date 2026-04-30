@@ -20,34 +20,22 @@ export type ListingPhotoModel = runtime.Types.Result.DefaultSelection<Prisma.$Li
 
 export type AggregateListingPhoto = {
   _count: ListingPhotoCountAggregateOutputType | null
-  _avg: ListingPhotoAvgAggregateOutputType | null
-  _sum: ListingPhotoSumAggregateOutputType | null
   _min: ListingPhotoMinAggregateOutputType | null
   _max: ListingPhotoMaxAggregateOutputType | null
 }
 
-export type ListingPhotoAvgAggregateOutputType = {
-  id: number | null
-  listingId: number | null
-}
-
-export type ListingPhotoSumAggregateOutputType = {
-  id: number | null
-  listingId: number | null
-}
-
 export type ListingPhotoMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   url: string | null
   publicId: string | null
-  listingId: number | null
+  listingId: string | null
 }
 
 export type ListingPhotoMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   url: string | null
   publicId: string | null
-  listingId: number | null
+  listingId: string | null
 }
 
 export type ListingPhotoCountAggregateOutputType = {
@@ -58,16 +46,6 @@ export type ListingPhotoCountAggregateOutputType = {
   _all: number
 }
 
-
-export type ListingPhotoAvgAggregateInputType = {
-  id?: true
-  listingId?: true
-}
-
-export type ListingPhotoSumAggregateInputType = {
-  id?: true
-  listingId?: true
-}
 
 export type ListingPhotoMinAggregateInputType = {
   id?: true
@@ -129,18 +107,6 @@ export type ListingPhotoAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: ListingPhotoAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: ListingPhotoSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: ListingPhotoMinAggregateInputType
@@ -171,20 +137,16 @@ export type ListingPhotoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: ListingPhotoCountAggregateInputType | true
-  _avg?: ListingPhotoAvgAggregateInputType
-  _sum?: ListingPhotoSumAggregateInputType
   _min?: ListingPhotoMinAggregateInputType
   _max?: ListingPhotoMaxAggregateInputType
 }
 
 export type ListingPhotoGroupByOutputType = {
-  id: number
+  id: string
   url: string
   publicId: string
-  listingId: number
+  listingId: string
   _count: ListingPhotoCountAggregateOutputType | null
-  _avg: ListingPhotoAvgAggregateOutputType | null
-  _sum: ListingPhotoSumAggregateOutputType | null
   _min: ListingPhotoMinAggregateOutputType | null
   _max: ListingPhotoMaxAggregateOutputType | null
 }
@@ -208,10 +170,10 @@ export type ListingPhotoWhereInput = {
   AND?: Prisma.ListingPhotoWhereInput | Prisma.ListingPhotoWhereInput[]
   OR?: Prisma.ListingPhotoWhereInput[]
   NOT?: Prisma.ListingPhotoWhereInput | Prisma.ListingPhotoWhereInput[]
-  id?: Prisma.IntFilter<"ListingPhoto"> | number
+  id?: Prisma.StringFilter<"ListingPhoto"> | string
   url?: Prisma.StringFilter<"ListingPhoto"> | string
   publicId?: Prisma.StringFilter<"ListingPhoto"> | string
-  listingId?: Prisma.IntFilter<"ListingPhoto"> | number
+  listingId?: Prisma.StringFilter<"ListingPhoto"> | string
   listing?: Prisma.XOR<Prisma.ListingScalarRelationFilter, Prisma.ListingWhereInput>
 }
 
@@ -224,13 +186,13 @@ export type ListingPhotoOrderByWithRelationInput = {
 }
 
 export type ListingPhotoWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.ListingPhotoWhereInput | Prisma.ListingPhotoWhereInput[]
   OR?: Prisma.ListingPhotoWhereInput[]
   NOT?: Prisma.ListingPhotoWhereInput | Prisma.ListingPhotoWhereInput[]
   url?: Prisma.StringFilter<"ListingPhoto"> | string
   publicId?: Prisma.StringFilter<"ListingPhoto"> | string
-  listingId?: Prisma.IntFilter<"ListingPhoto"> | number
+  listingId?: Prisma.StringFilter<"ListingPhoto"> | string
   listing?: Prisma.XOR<Prisma.ListingScalarRelationFilter, Prisma.ListingWhereInput>
 }, "id">
 
@@ -240,65 +202,66 @@ export type ListingPhotoOrderByWithAggregationInput = {
   publicId?: Prisma.SortOrder
   listingId?: Prisma.SortOrder
   _count?: Prisma.ListingPhotoCountOrderByAggregateInput
-  _avg?: Prisma.ListingPhotoAvgOrderByAggregateInput
   _max?: Prisma.ListingPhotoMaxOrderByAggregateInput
   _min?: Prisma.ListingPhotoMinOrderByAggregateInput
-  _sum?: Prisma.ListingPhotoSumOrderByAggregateInput
 }
 
 export type ListingPhotoScalarWhereWithAggregatesInput = {
   AND?: Prisma.ListingPhotoScalarWhereWithAggregatesInput | Prisma.ListingPhotoScalarWhereWithAggregatesInput[]
   OR?: Prisma.ListingPhotoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ListingPhotoScalarWhereWithAggregatesInput | Prisma.ListingPhotoScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"ListingPhoto"> | number
+  id?: Prisma.StringWithAggregatesFilter<"ListingPhoto"> | string
   url?: Prisma.StringWithAggregatesFilter<"ListingPhoto"> | string
   publicId?: Prisma.StringWithAggregatesFilter<"ListingPhoto"> | string
-  listingId?: Prisma.IntWithAggregatesFilter<"ListingPhoto"> | number
+  listingId?: Prisma.StringWithAggregatesFilter<"ListingPhoto"> | string
 }
 
 export type ListingPhotoCreateInput = {
+  id?: string
   url: string
   publicId: string
   listing: Prisma.ListingCreateNestedOneWithoutPhotosInput
 }
 
 export type ListingPhotoUncheckedCreateInput = {
-  id?: number
+  id?: string
   url: string
   publicId: string
-  listingId: number
+  listingId: string
 }
 
 export type ListingPhotoUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   listing?: Prisma.ListingUpdateOneRequiredWithoutPhotosNestedInput
 }
 
 export type ListingPhotoUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
-  listingId?: Prisma.IntFieldUpdateOperationsInput | number
+  listingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ListingPhotoCreateManyInput = {
-  id?: number
+  id?: string
   url: string
   publicId: string
-  listingId: number
+  listingId: string
 }
 
 export type ListingPhotoUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ListingPhotoUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
-  listingId?: Prisma.IntFieldUpdateOperationsInput | number
+  listingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ListingPhotoListRelationFilter = {
@@ -318,11 +281,6 @@ export type ListingPhotoCountOrderByAggregateInput = {
   listingId?: Prisma.SortOrder
 }
 
-export type ListingPhotoAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  listingId?: Prisma.SortOrder
-}
-
 export type ListingPhotoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -334,11 +292,6 @@ export type ListingPhotoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrder
-  listingId?: Prisma.SortOrder
-}
-
-export type ListingPhotoSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   listingId?: Prisma.SortOrder
 }
 
@@ -385,12 +338,13 @@ export type ListingPhotoUncheckedUpdateManyWithoutListingNestedInput = {
 }
 
 export type ListingPhotoCreateWithoutListingInput = {
+  id?: string
   url: string
   publicId: string
 }
 
 export type ListingPhotoUncheckedCreateWithoutListingInput = {
-  id?: number
+  id?: string
   url: string
   publicId: string
 }
@@ -425,31 +379,32 @@ export type ListingPhotoScalarWhereInput = {
   AND?: Prisma.ListingPhotoScalarWhereInput | Prisma.ListingPhotoScalarWhereInput[]
   OR?: Prisma.ListingPhotoScalarWhereInput[]
   NOT?: Prisma.ListingPhotoScalarWhereInput | Prisma.ListingPhotoScalarWhereInput[]
-  id?: Prisma.IntFilter<"ListingPhoto"> | number
+  id?: Prisma.StringFilter<"ListingPhoto"> | string
   url?: Prisma.StringFilter<"ListingPhoto"> | string
   publicId?: Prisma.StringFilter<"ListingPhoto"> | string
-  listingId?: Prisma.IntFilter<"ListingPhoto"> | number
+  listingId?: Prisma.StringFilter<"ListingPhoto"> | string
 }
 
 export type ListingPhotoCreateManyListingInput = {
-  id?: number
+  id?: string
   url: string
   publicId: string
 }
 
 export type ListingPhotoUpdateWithoutListingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ListingPhotoUncheckedUpdateWithoutListingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ListingPhotoUncheckedUpdateManyWithoutListingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -504,10 +459,10 @@ export type $ListingPhotoPayload<ExtArgs extends runtime.Types.Extensions.Intern
     listing: Prisma.$ListingPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     url: string
     publicId: string
-    listingId: number
+    listingId: string
   }, ExtArgs["result"]["listingPhoto"]>
   composites: {}
 }
@@ -932,10 +887,10 @@ export interface Prisma__ListingPhotoClient<T, Null = never, ExtArgs extends run
  * Fields of the ListingPhoto model
  */
 export interface ListingPhotoFieldRefs {
-  readonly id: Prisma.FieldRef<"ListingPhoto", 'Int'>
+  readonly id: Prisma.FieldRef<"ListingPhoto", 'String'>
   readonly url: Prisma.FieldRef<"ListingPhoto", 'String'>
   readonly publicId: Prisma.FieldRef<"ListingPhoto", 'String'>
-  readonly listingId: Prisma.FieldRef<"ListingPhoto", 'Int'>
+  readonly listingId: Prisma.FieldRef<"ListingPhoto", 'String'>
 }
     
 

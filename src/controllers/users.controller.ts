@@ -1,13 +1,24 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma.js";
+import { getCache, setCache } from "../config/cache.js";
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+  const page = parseInt(req.query["page"] as string) || 1;
+  const limit = parseInt(req.query["limit"] as string) || 10;
+  const skip = (page - 1) * limit;
 
-export async function getAllUsers(req: Request, res: Response) {
-  const users = await prisma.user.findMany();
-  res.status(200).json(users);
-}
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({ skip, take: limit }),
+    prisma.user.count(),
+  ]);
+
+  res.status(200).json({
+    data: users,
+    meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+  });
+};
 
 export async function getUserById(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
+const id = req.params.id;
   const user = await prisma.user.findUnique({ where: { id } });
 
   if (!user) {
@@ -62,7 +73,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 };
 
 export async function updateUser(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const existing = await prisma.user.findUnique({ where: { id } });
 
   if (!existing) {
@@ -79,7 +90,7 @@ export async function updateUser(req: Request, res: Response) {
 }
 
 export async function deleteUser(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
+const id = req.params.id;
   const existing = await prisma.user.findUnique({ where: { id } });
 
   if (!existing) {
@@ -90,3 +101,23 @@ export async function deleteUser(req: Request, res: Response) {
   await prisma.user.delete({ where: { id } });
   res.status(200).json({ message: `User "${existing.name}" deleted successfully.` });
 }
+export const getUserStats = async (req: Request, res: Response): Promise<void> => {
+  const cacheKey = "user_stats";
+  const cached = getCache(cacheKey);
+  if (cached) {
+    res.status(200).json(cached);
+    return;
+  }
+
+  const [totalUsers, byRole] = await Promise.all([
+    prisma.user.count(),
+    prisma.user.groupBy({
+      by: ["role"],
+      _count: { role: true },
+    }),
+  ]);
+
+  const result = { totalUsers, byRole };
+  setCache(cacheKey, result, 300); 
+  res.status(200).json(result);
+};

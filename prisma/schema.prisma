@@ -19,9 +19,8 @@ enum BookingStatus {
   CONFIRMED
   CANCELLED
 }
-
 model User {
-  id                Int       @id @default(autoincrement())
+  id                String    @id @default(uuid())
   name              String
   email             String    @unique
   username          String    @unique
@@ -36,9 +35,11 @@ model User {
   updatedAt         DateTime  @updatedAt
   listings          Listing[]
   bookings          Booking[]
+  reviews           Review[]
 }
+
 model Listing {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(uuid())
   title         String
   description   String
   location      String
@@ -47,10 +48,11 @@ model Listing {
   type          String
   amenities     String[]
   rating        Float?
-  hostId        Int
+  hostId        String
   host          User           @relation(fields: [hostId], references: [id])
   bookings      Booking[]
   photos        ListingPhoto[]
+  reviews       Review[]
 
   @@index([location])
   @@index([pricePerNight])
@@ -60,16 +62,17 @@ model Listing {
 }
 
 model ListingPhoto {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   url       String
   publicId  String
-  listingId Int
+  listingId String
   listing   Listing @relation(fields: [listingId], references: [id])
 }
+
 model Booking {
-  id         Int           @id @default(autoincrement())
-  listingId  Int
-  guestId    Int
+  id         String        @id @default(uuid())
+  listingId  String
+  guestId    String
   checkIn    DateTime
   checkOut   DateTime
   totalPrice Float
@@ -81,4 +84,18 @@ model Booking {
   @@index([guestId])
   @@index([listingId])
   @@index([listingId, checkIn, checkOut])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  userId    String
+  listingId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  listing   Listing  @relation(fields: [listingId], references: [id])
+
+  @@index([userId])
+  @@index([listingId])
 }
