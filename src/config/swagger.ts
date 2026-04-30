@@ -12,14 +12,15 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
+        url: "https://airbnb-api-b1qu.onrender.com",
+        description: "Production server",
+      },
+      {
         url: "http://localhost:3000",
         description: "Development server",
       },
     ],
     components: {
-      // Define the Bearer token security scheme
-      // This adds an "Authorize" button to the Swagger UI
-      // where you can paste your JWT token once and it's sent with all requests
       securitySchemes: {
         bearerAuth: {
           type: "http",
@@ -29,11 +30,8 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  // Tell swagger-jsdoc where to find the JSDoc comments
-  // It scans these files for @swagger annotations
-  apis: ["./src/routes/*.ts"],
+  apis: ["./src/routes/v1/*.ts"],
 };
-
 const swaggerSpec = swaggerJsdoc(options);
 
 // setupSwagger mounts the Swagger UI at /api-docs
