@@ -12,11 +12,11 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "https://airbnb-api-b1qu.onrender.com",
+        url: "https://airbnb-api-b1qu.onrender.com/api.v1",
         description: "Production server",
       },
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:3000/api/v1",
         description: "Development server",
       },
     ],
@@ -34,14 +34,10 @@ const options: swaggerJsdoc.Options = {
 };
 const swaggerSpec = swaggerJsdoc(options);
 
-// setupSwagger mounts the Swagger UI at /api-docs
-// Call this in index.ts after setting up middleware
 export function setupSwagger(app: Express) {
-  // Serve the interactive Swagger UI
+
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-  // Also expose the raw OpenAPI JSON spec
-  // Useful for importing into Postman or generating client SDKs
   app.get("/api-docs.json", (req, res) => {
     res.json(swaggerSpec);
   });

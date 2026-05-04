@@ -23,7 +23,7 @@ async function main() {
     where: { email: "alice@example.com" },
     update: {},
     create: {
-      name: "Alice Johnson",
+      name: "Alice ",
       email: "alice@example.com",
       username: "alice_host",
       phone: "+250788000001",
@@ -84,11 +84,11 @@ async function main() {
     },
   });
 
-  console.log("👥 Created users");
+  console.log(" Created users");
 
   const apartment = await prisma.listing.create({
     data: {
-      title: "Cozy Apartment in Kigali",
+      title: "Cozy ]Apartment in Kigali",
       description: "A bright modern apartment in the city center",
       location: "Kigali, Rwanda",
       pricePerNight: 75,
@@ -179,7 +179,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error("❌ Seed failed:", e);
+    console.error(" Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => await prisma.$disconnect());
