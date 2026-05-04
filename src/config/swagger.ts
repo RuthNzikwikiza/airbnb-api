@@ -32,15 +32,13 @@ const options: swaggerJsdoc.Options = {
   },
   apis: ["./src/routes/v1/*.ts"],
 };
+
 const swaggerSpec = swaggerJsdoc(options);
 
 export function setupSwagger(app: Express) {
-
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
   app.get("/api-docs.json", (req, res) => {
     res.json(swaggerSpec);
   });
-
   console.log("Swagger docs available at http://localhost:3000/api-docs");
-}
+}''

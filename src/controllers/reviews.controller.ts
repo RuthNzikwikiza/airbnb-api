@@ -66,8 +66,8 @@ export async function createReview(req: AuthRequest, res: Response) {
       listingId,
     },
   });
-
-  clearCache(`reviews_listing_${listingId}_1_10`);
+clearCache(`reviews_listing_${listingId}_1_10`);
+clearCache(`review_summary_${listingId}`);
   res.status(201).json(review);
 }
 
