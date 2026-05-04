@@ -1,4 +1,5 @@
 import "dotenv/config";
+import cors from "cors";
 import express, { Request, Response, NextFunction } from "express";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
@@ -11,6 +12,7 @@ import { authenticate } from "./middlewares/auth.middleware.js";
 import { deleteReview } from "./controllers/reviews.controller.js";
 
 const app = express();
+app.use(cors());
 const PORT = Number(process.env["PORT"]) || 3000;
 
 app.use(compression());
