@@ -72,55 +72,61 @@ export async function deleteAvatar(req: AuthRequest, res: Response) {
 }
 
 export async function uploadListingPhotos(req: AuthRequest, res: Response) {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  const listing = await prisma.listing.findUnique({
-    where: { id },
-    include: { photos: true },
-  });
+    const listing = await prisma.listing.findUnique({
+      where: { id },
+      include: { photos: true },
+    });
 
-  if (!listing) {
-    res.status(404).json({ error: "Listing not found." });
-    return;
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found." });
+    }
+
+    if (listing.hostId !== req.userId) {
+      return res.status(403).json({ error: "Not your listing." });
+    }
+
+    const files = req.files as Express.Multer.File[];
+
+    console.log("FILES RECEIVED:", files?.length);
+
+    if (!files || files.length === 0) {
+      return res.status(400).json({ error: "No files uploaded." });
+    }
+
+    const remainingSlots = 5 - listing.photos.length;
+    const filesToProcess = files.slice(0, remainingSlots);
+
+    const uploadedPhotos = await Promise.all(
+      filesToProcess.map(async (file) => {
+        console.log("Uploading file:", file.originalname);
+
+        const { url, publicId } = await uploadToCloudinary(
+          file.buffer,
+          "airbnb/listings"
+        );
+
+        return prisma.listingPhoto.create({
+          data: { url, publicId, listingId: id },
+        });
+      })
+    );
+
+    return res.status(201).json({
+      message: `${uploadedPhotos.length} photo(s) uploaded successfully.`,
+      photos: uploadedPhotos,
+    });
+
+  } catch (err: any) {
+    console.error("UPLOAD ERROR:", err);
+    return res.status(500).json({
+      error: "Upload failed",
+      details: err.message,
+    });
   }
-
-  if (listing.hostId !== req.userId) {
-    res.status(403).json({ error: "You can only upload photos to your own listings." });
-    return;
-  }
-
-  if (listing.photos.length >= 5) {
-    res.status(400).json({ error: "Maximum of 5 photos allowed per listing." });
-    return;
-  }
-
-  const files = req.files as Express.Multer.File[];
-  if (!files || files.length === 0) {
-    res.status(400).json({ error: "No files uploaded." });
-    return;
-  }
-
-  const remainingSlots = 5 - listing.photos.length;
-  const filesToProcess = files.slice(0, remainingSlots);
-
-  const uploadedPhotos = await Promise.all(
-    filesToProcess.map(async (file) => {
-      const { url, publicId } = await uploadToCloudinary(
-        file.buffer,
-        "airbnb/listings"
-      );
-      return prisma.listingPhoto.create({
-        data: { url, publicId, listingId: id },
-      });
-    })
-  );
-
-  res.status(201).json({
-    message: `${uploadedPhotos.length} photo(s) uploaded successfully.`,
-    photos: uploadedPhotos,
-  });
 }
-
 export async function deleteListingPhoto(req: AuthRequest, res: Response) {
   const id = req.params.id;
   const photoId = req.params.photoId;

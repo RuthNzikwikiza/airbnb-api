@@ -14,13 +14,10 @@ export async function uploadToCloudinary(
     const stream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: "auto",
+        resource_type: "image",
       },
       (error, result) => {
-        if (error || !result) {
-          console.error("Cloudinary upload error:", error);
-          return reject(error);
-        }
+        if (error || !result) return reject(error);
 
         resolve({
           url: result.secure_url,
@@ -32,7 +29,6 @@ export async function uploadToCloudinary(
     stream.end(buffer);
   });
 }
-
 export async function deleteFromCloudinary(
   publicId: string
 ): Promise<void> {
