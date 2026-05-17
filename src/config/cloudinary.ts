@@ -17,15 +17,25 @@ export async function uploadToCloudinary(
         resource_type: "auto",
       },
       (error, result) => {
-        if (error || !result) return reject(error);
-        resolve({ url: result.secure_url, publicId: result.public_id });
+        if (error || !result) {
+          console.error("Cloudinary upload error:", error);
+          return reject(error);
+        }
+
+        resolve({
+          url: result.secure_url,
+          publicId: result.public_id,
+        });
       }
     );
+
     stream.end(buffer);
   });
 }
 
-export async function deleteFromCloudinary(publicId: string): Promise<void> {
+export async function deleteFromCloudinary(
+  publicId: string
+): Promise<void> {
   await cloudinary.uploader.destroy(publicId);
 }
 
